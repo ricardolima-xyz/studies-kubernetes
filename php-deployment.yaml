@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-hello
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: php-hello
+  template:
+    metadata:
+      labels:
+        app: php-hello
+    spec:
+      containers:
+      - name: php-hello
+        image: php-hello
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80
+        env:
+        - name: DB_HOST
+          value: "mysql-service"
+        - name: DB_USER
+          value: "root"
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_ROOT_PASSWORD
+
